@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger/issues"
   },
-  "homepage": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger#readme"
+  "homepage": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
 }

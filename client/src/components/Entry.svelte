@@ -1,10 +1,15 @@
 <script type="ts">
-  export let type = "directory";
-  console.log(type);
+  export let name = '';
+  export let type = '';
+  export let resource = '';
+  export let displayName = '';
+
+  resource;
+  displayName;
 </script>
 
 <main on:click>
-  <span class="icon">{type == "directory" ? '📁' : '📄'}</span><span>Testfile.png</span>
+  <span class="icon">{type == "directory" ? '📁' : '📄'}</span><span>{name}</span>
 </main>
 
 <style>

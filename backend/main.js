@@ -1,8 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const sharp = require('sharp');
-var exif = require('exif-reader');
-
+const exif = require('exif-reader');
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
 
@@ -40,6 +39,3 @@ function logDirectory(relativePath) {
     console.log(string);
   });
 }
-
-
-

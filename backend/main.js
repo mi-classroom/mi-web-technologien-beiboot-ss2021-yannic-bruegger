@@ -3,21 +3,23 @@ const fs = require('fs');
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
 
+const prependEmoji = (emoji, text) => `${emoji} ${text}`;
+const displayDir = (dirname) => prependEmoji('📂', dirname);
+const displayFile = (filename) => prependEmoji('📄', filename);
+
 logDirectory();
-logDirectory('/G_US_HAM_46-1987');
-logDirectory('/G_US_HAM_46-1987/01_Overall');
+logDirectory('/G_US_HAM_46-1987', 1);
+logDirectory('/G_US_HAM_46-1987/04_UV', 2);
 
 
-function logDirectory(relativePath) {
-  fs.readdir(TARGET_DIRECTORY + (relativePath || ''), {withFileTypes: true}, (err, files) => {
-    if(err) throw err;
-    files.forEach((file) => {
-      console.log(file.isDirectory() ? displayDir(file.name) : displayFile(file.name));
-    });
+function logDirectory(relativePath, indentation) {
+  const files = fs.readdirSync(TARGET_DIRECTORY + (relativePath || ''), {withFileTypes: true});
+
+  files.forEach((file) => {
+    const string = " ".repeat(indentation*2) + (file.isDirectory() ? displayDir(file.name) : displayFile(file.name));
+    console.log(string);
   });
 }
 
 
-const prependEmoji = (emoji, text) => `${emoji} ${text}`;
-const displayDir = (dirname) => prependEmoji('📂', dirname);
-const displayFile = (filename) => prependEmoji('📄', filename);
+

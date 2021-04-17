@@ -6,7 +6,7 @@ proposed; trial
 
 ## Context
 
-Different configurations need to be made depending on where the server will be hosted.
+Different configurations need to be made depending on where the server will be hosted. Instead of making configuration in the code, we want to seperate it as suggested in [The Twelve-Factor App](https://12factor.net/config).
 
 ## Decision
 

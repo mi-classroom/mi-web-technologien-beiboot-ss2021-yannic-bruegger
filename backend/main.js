@@ -1,0 +1,88 @@
+require('dotenv').config();
+const fs = require('fs');
+const sharp = require('sharp');
+const exif = require('exif-reader');
+const express = require('express')
+const app = express()
+
+const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
+const FILE_PATTERN = process.env.FILE_PATTERN || '(.*)\\.(jpg|jpeg)';
+const PORT = process.env.PORT || 3000;
+
+
+app.get('*', async (req, res) => {
+  if(!req.originalUrl){
+    res.status(500).send('Could not handle the request. It has no original URL.');
+    return;
+  }
+
+  if(req.originalUrl.indexOf('/../') >= 0) {
+    res.status(501).send('Backwards navigation not allowed.');
+    return;
+  }
+  
+  const relativePath = req.originalUrl;
+  const absolutePath = getAbsolutePath(req.originalUrl);
+
+  if(!isServed(absolutePath)) {
+    res.status(504).send('Directory or file not found.');
+    return;
+  }
+  
+  if(fs.lstatSync(absolutePath).isDirectory()) {
+    res.send(getDirectoryContent(relativePath));
+  } else {
+    res.send(await getMetadata(absolutePath));
+  }
+})
+
+app.listen(PORT, () => {
+  console.log(`Cranach metadata service listening at http://localhost:${PORT}`)
+})
+
+function getAbsolutePath(relativePath) {
+  return TARGET_DIRECTORY + (relativePath || '')
+}
+
+function isServed(absolutePath) {
+  const doesntExist = !fs.existsSync(absolutePath);
+  const isDirectory = fs.lstatSync(absolutePath).isDirectory();
+  const fileMatchesPattern = (new RegExp(FILE_PATTERN)).test(absolutePath);
+  if(doesntExist) return false;
+  if(isDirectory || fileMatchesPattern) return true;
+  return false;
+}
+
+async function getMetadata(absolutePath){
+  const exists = fs.existsSync(absolutePath);
+  const isFile = fs.lstatSync(absolutePath).isFile();
+
+  if(exists && isFile){
+    const metadata = exif(await (await sharp(absolutePath).metadata()).exif).image;
+    return metadata;
+  }
+}
+
+function getDirectoryContent(relativePathToDirectory) {
+  const prependEmoji = (emoji, text) => `${emoji} ${text}`;
+  const displayDir = (dirname) => prependEmoji('📂', dirname);
+  const displayFile = (filename) => prependEmoji('📄', filename);
+  
+  const pathToDirectory = getAbsolutePath(relativePathToDirectory)
+
+  const items = fs.readdirSync(pathToDirectory, {withFileTypes: true});
+  const content = [];
+  items.forEach((item) => {
+    const absolutePath = getAbsolutePath(`${relativePathToDirectory}/${item.name}`);
+    console.log(absolutePath)
+    if(isServed(absolutePath)){
+      const displayName = (item.isDirectory() ? displayDir(item.name) : displayFile(item.name));
+      const name = item.name;
+      const resource = `${relativePathToDirectory}/${item.name}`;
+      const type = item.isDirectory() ? 'directory' : 'file';
+      content.push({displayName, name, resource, type});
+    };
+  });
+
+  return content;
+}

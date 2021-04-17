@@ -1,0 +1,25 @@
+{
+  "name": "beiboot-ss2021-backend",
+  "version": "1.0.0",
+  "description": "The backend server for beiboot-ss2021",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger.git"
+  },
+  "author": "Yannic Brügger <yannic.bruegger@smail.th-koeln.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger/issues"
+  },
+  "homepage": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "exif-reader": "^1.0.3",
+    "express": "^4.17.1",
+    "sharp": "^0.28.1"
+  }
+}

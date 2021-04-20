@@ -2,8 +2,10 @@ require('dotenv').config();
 const fs = require('fs');
 const sharp = require('sharp');
 const exif = require('exif-reader');
-const express = require('express')
-const app = express()
+const cors = require('cors');
+const express = require('express');
+const app = express();
+app.use(cors());
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
 const FILE_PATTERN = process.env.FILE_PATTERN || '(.*)\\.(jpg|jpeg)';
@@ -21,7 +23,7 @@ app.get('*', async (req, res) => {
     return;
   }
   
-  const relativePath = req.originalUrl;
+  const relativePath = req.originalUrl === '/' ? '' : req.originalUrl;
   const absolutePath = getAbsolutePath(req.originalUrl);
 
   if(!isServed(absolutePath)) {

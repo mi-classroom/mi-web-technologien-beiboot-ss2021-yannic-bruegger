@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2021-yannic-bruegger#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "exif-reader": "^1.0.3",
     "express": "^4.17.1",

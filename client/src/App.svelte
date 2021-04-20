@@ -35,16 +35,21 @@
 </script>
 
 <main>
- <p>{url ? url : '/'}</p>
- <div>
-   {#if url && items.length > 0}<Entry name=".." on:click={() => {navigate(getResource())}}></Entry>{/if}
-   {#each items as item}
-   <Entry {...item} on:click={() => {item.type == 'directory' ? navigate(item.resource) : getMetadata(item.resource);}}></Entry>
-   {/each}
- </div>
- <p>{Object.values(meta)}</p>
+  <div>
+    <div class="url">{url ? url : '/'}</div>
+    {#if url && items.length > 0}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
+    {#each items as item}
+    <Entry {...item} on:click={() => {item.type == 'directory' ? navigate(item.resource) : getMetadata(item.resource);}}></Entry>
+    {/each}
+  </div>
 </main>
 
 <style>
-
+.url {
+  width: 100%;
+  padding: 1em 1em;
+}
+.url:last-child {
+  border-bottom: 1px solid var(--grey-4);
+}
 </style>

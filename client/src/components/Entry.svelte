@@ -3,13 +3,17 @@
   export let type = '';
   export let resource = '';
   export let displayName = '';
-
+  const icons = {
+    'directory': '📁',
+    'file': '📄',
+    'top': '↖️',
+  }
   resource;
   displayName;
 </script>
 
 <main on:click>
-  <span class="icon">{type == "directory" ? '📁' : '📄'}</span><span>{name}</span>
+  <span class="icon">{icons[type]}</span><span>{name}</span>
 </main>
 
 <style>

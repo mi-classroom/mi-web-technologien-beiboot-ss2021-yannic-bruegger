@@ -60,8 +60,10 @@ async function getMetadata(absolutePath){
   const isFile = fs.lstatSync(absolutePath).isFile();
 
   if(exists && isFile){
-    const metadata = exif(await (await sharp(absolutePath).metadata()).exif).image;
-    return metadata;
+    const data = {};
+    data.meta = exif(await (await sharp(absolutePath).metadata()).exif).image;
+    data.image = `data:image;base64,${fs.readFileSync(absolutePath).toString('base64')}`;
+    return data;
   }
 }
 

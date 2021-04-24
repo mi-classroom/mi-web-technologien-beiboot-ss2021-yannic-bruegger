@@ -5,20 +5,20 @@
 
   const baseUrl = 'http://127.0.0.1:3000';
   let items = [];
-  let meta = {};
+  let data = { meta: undefined, image: undefined};
   let url : string;
 
   async function navigate(to?: string) {
     items = [];
-    meta = {};
+    data = { meta: undefined, image: undefined};
     url = to || '';
     window.location.search = url ? `?path=${url}` : '';
   }
 
   async function getMetadata(from: string) {
-    meta = {};
-    meta = {...(await axios.get(baseUrl + from)).data};
-    console.log(meta);
+    data = { meta: undefined, image: undefined};
+    data = {...(await axios.get(baseUrl + from)).data};
+    console.log(data);
   }
 
   function getResource() : string {
@@ -45,8 +45,8 @@
     {/each}
   </div>
   <div class="preview">
-    {#if Object.keys(meta).length > 0}
-      <Preview meta="{meta}"></Preview>
+    {#if data.image ?? data.meta}
+      <Preview data="{data}"></Preview>
     {/if}
   </div>
 </main>

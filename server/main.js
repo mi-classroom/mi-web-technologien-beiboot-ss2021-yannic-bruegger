@@ -10,7 +10,7 @@ app.use(cors());
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
 const FILE_PATTERN = process.env.FILE_PATTERN || '(.*)\\.(jpg|jpeg)';
 const PORT = process.env.PORT || 3000;
-
+const VALIDFIELDS = process.env?.FIELDS?.split(',').map((field)=>field.trim()) ?? [];
 
 app.get('*', async (req, res) => {
   if(!req.originalUrl){
@@ -58,10 +58,17 @@ function isServed(absolutePath) {
 async function getMetadata(absolutePath){
   const exists = fs.existsSync(absolutePath);
   const isFile = fs.lstatSync(absolutePath).isFile();
-
   if(exists && isFile){
     const data = {};
-    data.meta = exif(await (await sharp(absolutePath).metadata()).exif).image;
+    const fullMeta = exif(await (await sharp(absolutePath).metadata()).exif).image;
+    if(VALIDFIELDS.length > 0) {
+      data.meta = {};
+      Object.keys(fullMeta).filter((key)=>VALIDFIELDS.includes(key)).forEach((key) => {
+        data.meta[key] = fullMeta[key];
+      });
+    } else {
+      data.meta = fullMeta;
+    }
     data.image = `data:image;base64,${fs.readFileSync(absolutePath).toString('base64')}`;
     return data;
   }

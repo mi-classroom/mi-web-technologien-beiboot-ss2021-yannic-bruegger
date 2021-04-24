@@ -3,7 +3,7 @@
   import Entry from './components/Entry.svelte';
   import Preview from './components/Preview.svelte';
 
-  const baseUrl = 'http://192.168.2.106:3000';
+  const baseUrl = 'http://127.0.0.1:3000';
   let items = [];
   let meta = {};
   let url : string;

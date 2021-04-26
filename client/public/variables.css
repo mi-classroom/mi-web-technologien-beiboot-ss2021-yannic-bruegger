@@ -1,11 +1,17 @@
 :root {
 	--base: 16px;
-  --foreground-color: hsl(0, 0%, 15%);
-  --background-color: hsl(0, 0%, 95%);
+  --color-foreground-primary: #c9d1d9;
+  --color-foreground-secondary: #8b949e;
+  --color-background-primary: #090C10;
+  --color-background-secondary: #0D1117;
+  --color-background-ternary: #21262d;
+  --color-border-secondary: #21262d;
+
   --accent-color-0: hsl(293, 52%, 45%);
   --accent-color-1: hsl(293, 52%, 40%);
   --accent-color-2: hsl(293, 52%, 35%);
   
+
   --grey-0: hsl(0, 0%, 25%);
   --grey-1: hsl(0, 0%, 40%);
   --grey-2: hsl(0, 0%, 50%);

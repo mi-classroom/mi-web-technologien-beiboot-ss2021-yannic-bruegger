@@ -8,6 +8,9 @@
 </script>
 
 <main>
+  <div class="preview">
+    <img src="{data.image}" alt="{data.meta.Artist}">
+  </div>
   <div class="metadata">
     <table>
       <tr>
@@ -22,9 +25,6 @@
       {/each}
     </table>
   </div>
-  <div class="preview">
-    <img src="{data.image}" alt="{data.meta.Artist}">
-  </div>
 </main>
 
 <style>
@@ -35,12 +35,22 @@ main {
   display: flex;
   position: relative;
 }
+img {
+  max-height: calc(100% - 2em);
+  max-width: 100%;
+  position: absolute;
+}
 .metadata {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border-secondary);
   position: absolute;
   top: 1em;
   right: 1em;
-  background-color: #00000041;
-  max-width: 300px;
-  padding: 1em;
+  max-width: 400px;
+  border-radius: 6px;
+}
+
+th, td {
+  padding: .5em 1em;
 }
 </style>

@@ -53,7 +53,8 @@
 
 <style>
 main {
-  height: 100%;
+  width: 100%;
+  height: 100vh;
   display: grid;
   grid-template-columns: 0.5fr 1.5fr;
   grid-template-rows: 1fr;
@@ -63,13 +64,20 @@ main {
 
 .preview {
   width: 100%;
-  background-color: var(--grey-0);
   color: var(--grey-5);
+}
+
+.nav {
+  padding: 1em;
+  background-color: var(--color-background-secondary);
+  border-right: 1px solid var(--color-border-secondary);
 }
 
 .url {
   width: 100%;
   padding: 1em 1em;
+  color: var(--color-foreground-primary);
+  font-size: 1.3em;
 }
 .url:last-child {
   border-bottom: 1px solid var(--grey-4);

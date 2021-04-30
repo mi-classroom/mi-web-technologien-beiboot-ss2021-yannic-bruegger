@@ -20,6 +20,7 @@ In order to create a container, you need to build an image from the Dockerfile f
 cd ./server
 
 # Build your own docker image from the Dockerfile
+# The last argument represents the directory that contains the Dockerfile ('.' as 'current directory' in this case)
 docker build -t [NAME_OF_YOUR_CHOICE] . 
 
 # Create an accessible container

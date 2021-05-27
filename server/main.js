@@ -24,8 +24,9 @@ app.get('*', async (req, res) => {
   }
   
   const searchQuery = req.query['filter'];
-  const relativePath = req.originalUrl.split('?')[0] === '/' ? '' : req.originalUrl.split('?')[0];
-  const absolutePath = getAbsolutePath(req.originalUrl.split('?')[0]);
+  const urlPath = req.originalUrl.split('?')[0];
+  const relativePath = urlPath === '/' ? '' : urlPath;
+  const absolutePath = getAbsolutePath(urlPath);
 
   if(!isServed(absolutePath)) {
     res.status(504).send('Directory or file not found.');

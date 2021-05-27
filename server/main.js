@@ -24,7 +24,6 @@ app.get('*', async (req, res) => {
   }
   
   const searchQuery = req.query['filter'];
-  console.log(searchQuery);
   const relativePath = req.originalUrl.split('?')[0] === '/' ? '' : req.originalUrl.split('?')[0];
   const absolutePath = getAbsolutePath(req.originalUrl.split('?')[0]);
 
@@ -35,7 +34,7 @@ app.get('*', async (req, res) => {
   
   if(fs.lstatSync(absolutePath).isDirectory()) {
     if(searchQuery) {
-      res.send(getDirectoryContent(relativePath).filter((dir)=>{return dir.name.indexOf(String(searchQuery)) >= 0}));
+      res.send(getFilteredDirectoryContent(relativePath, searchQuery));
     }
     else {
       res.send(getDirectoryContent(relativePath));
@@ -79,6 +78,12 @@ async function getMetadata(absolutePath){
     data.image = `data:image;base64,${fs.readFileSync(absolutePath).toString('base64')}`;
     return data;
   }
+}
+
+function getFilteredDirectoryContent(relativePathToDirectory, searchQuery) {
+  return getDirectoryContent(relativePathToDirectory).filter((dir)=>
+    dir.name.indexOf(searchQuery) >= 0
+  );
 }
 
 function getDirectoryContent(relativePathToDirectory) {

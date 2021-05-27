@@ -27,7 +27,7 @@
     routes.pop();
     return routes.join('/');
   }
-  async function getItems(searchPhrase : string){
+  async function getItems(searchPhrase ?: string){
     url = window.location.search.split('=')[1]
     items = (await axios.get((url ? `${baseUrl}${url}` : baseUrl) + (searchPhrase ? `?filter=${searchPhrase}` : ''))).data;
     console.log(items);

@@ -7,6 +7,7 @@
   let items = [];
   let data = { meta: undefined, image: undefined};
   let url : string;
+  let searchPhrase : string;
 
   async function navigate(to?: string) {
     items = [];
@@ -26,20 +27,21 @@
     routes.pop();
     return routes.join('/');
   }
-  async function getItems(){
+  async function getItems(searchPhrase : string){
     url = window.location.search.split('=')[1]
-    items = (await axios.get(url ? baseUrl + url : baseUrl)).data;
+    items = (await axios.get((url ? `${baseUrl}${url}` : baseUrl) + (searchPhrase ? `?filter=${searchPhrase}` : ''))).data;
     console.log(items);
   }
 
 
-  getItems();
+$: getItems(searchPhrase);
 </script>
 
 <main>
   <div class="nav">
+    <input type="text" class="search" placeholder="Search ..." bind:value={searchPhrase}>
     <div class="url">{url ? url : '/'}</div>
-    {#if url && items.length > 0}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
+    {#if url}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
     {#each items as item}
     <Entry {...item} on:click={() => {item.type == 'directory' ? navigate(item.resource) : getMetadata(item.resource);}}></Entry>
     {/each}
@@ -81,5 +83,17 @@ main {
 }
 .url:last-child {
   border-bottom: 1px solid var(--grey-4);
+}
+
+.search{
+  width: 100%;
+  background-color: var(--color-background-secondary);
+  color: var(--color-foreground-primary);
+  border-radius: 3px;
+  border-color: var(--color-border-secondary);
+}
+
+.search:focus{
+  outline: none;
 }
 </style>

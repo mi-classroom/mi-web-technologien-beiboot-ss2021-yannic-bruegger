@@ -23,8 +23,10 @@ app.get('*', async (req, res) => {
     return;
   }
   
-  const relativePath = req.originalUrl === '/' ? '' : req.originalUrl;
-  const absolutePath = getAbsolutePath(req.originalUrl);
+  const searchQuery = req.query['filter'];
+  const urlPath = req.originalUrl.split('?')[0];
+  const relativePath = urlPath === '/' ? '' : urlPath;
+  const absolutePath = getAbsolutePath(urlPath);
 
   if(!isServed(absolutePath)) {
     res.status(504).send('Directory or file not found.');
@@ -32,7 +34,12 @@ app.get('*', async (req, res) => {
   }
   
   if(fs.lstatSync(absolutePath).isDirectory()) {
-    res.send(getDirectoryContent(relativePath));
+    if(searchQuery) {
+      res.send(getFilteredDirectoryContent(relativePath, searchQuery));
+    }
+    else {
+      res.send(getDirectoryContent(relativePath));
+    }
   } else {
     res.send(await getMetadata(absolutePath));
   }
@@ -72,6 +79,12 @@ async function getMetadata(absolutePath){
     data.image = `data:image;base64,${fs.readFileSync(absolutePath).toString('base64')}`;
     return data;
   }
+}
+
+function getFilteredDirectoryContent(relativePathToDirectory, searchQuery) {
+  return getDirectoryContent(relativePathToDirectory).filter((dir)=>
+    dir.name.indexOf(searchQuery) >= 0
+  );
 }
 
 function getDirectoryContent(relativePathToDirectory) {

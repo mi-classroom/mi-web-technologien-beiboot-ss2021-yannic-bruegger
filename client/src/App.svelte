@@ -2,10 +2,11 @@
   import axios from "axios";
   import Entry from './components/Entry.svelte';
   import Preview from './components/Preview.svelte';
+  import JSONViewer from './components/JSONViewer.svelte';
 
   const baseUrl = 'http://127.0.0.1:3000';
   let items = [];
-  let data = { meta: undefined, image: undefined};
+  let data : any = {};
   let url : string;
   let searchPhrase : string;
 
@@ -49,6 +50,9 @@ $: getItems(searchPhrase);
   <div class="preview">
     {#if data.image ?? data.meta}
       <Preview data="{data}"></Preview>
+    {/if}
+    {#if data.imageStack}
+      <JSONViewer data="{data}"></JSONViewer>
     {/if}
   </div>
 </main>

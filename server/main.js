@@ -41,7 +41,11 @@ app.get('*', async (req, res) => {
       res.send(getDirectoryContent(relativePath));
     }
   } else {
-    res.send(await getMetadata(absolutePath));
+    if(absolutePath.endsWith('.json')){
+      res.send(fs.readFileSync(absolutePath));
+    } else {
+      res.send(await getMetadata(absolutePath));
+    }
   }
 })
 

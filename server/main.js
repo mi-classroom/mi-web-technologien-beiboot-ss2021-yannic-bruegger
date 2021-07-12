@@ -1,23 +1,23 @@
 require('dotenv').config();
+
 const fs = require('fs');
 const sharp = require('sharp');
-const exif = require('exif-reader');
+const exiftool = require('exiftool-vendored').exiftool;
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const exiftool = require('exiftool-vendored').exiftool;
 
-app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(cors());
 
-const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
-const FILE_PATTERN = process.env.FILE_PATTERN || '(.*)\\.(jpg|jpeg)';
-const PORT = process.env.PORT || 3000;
+const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY ?? './data';
+const FILE_PATTERN = process.env.FILE_PATTERN ?? '(.*)\\.(jpg|jpeg)';
+const PORT = process.env.PORT ?? 3000;
 const VALIDFIELDS = process.env?.FIELDS?.split(',').map((field)=>field.trim()) ?? [];
 const VALID_IPTC_TAGS = process.env?.TAGS?.split(',').map((field)=>field.trim()) ?? [];
 
-app.post('*', async (req, res) => {
+app.post('*', cors(), async (req, res) => {
   if(!req.originalUrl){
     res.status(500).send('Could not handle the request. It has no original URL.');
     return;
@@ -47,10 +47,12 @@ app.post('*', async (req, res) => {
     return;
   }
 
-  setIPTCTagsOnDirectoryContent(directory, tags);
-
-  console.log(urlPath, relativePath, absolutePath);
-  res.send({urlPath, relativePath, absolutePath});
+  let successful = await setIPTCTagsOnDirectoryContent(relativePath, req.body);
+  if(successful) {
+    res.send({urlPath, relativePath, absolutePath});
+  } else {
+    res.status(506).send('Unable to update IPTC data.');
+  }
 });
 
 app.get('*', async (req, res) => {
@@ -165,6 +167,18 @@ function getDirectoryContent(relativePathToDirectory) {
   return content;
 }
 
-function setIPTCTagsOnDirectoryContent(directory, tags) {
-  return;
+function setIPTCTagsOnDirectoryContent(relativePath, tags) {
+  let content = getDirectoryContent(relativePath);
+  content.forEach((item) => {
+    if(item.type === 'file'){
+      exiftool.write(`${getAbsolutePath(relativePath)}/${item.name}`, tags, ['-overwrite_original']);
+    }
+  });
+  return true;
+  try {
+    
+  } catch {
+    return false;
+  }
+  return true;
 }

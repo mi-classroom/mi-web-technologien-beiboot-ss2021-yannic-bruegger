@@ -9,6 +9,7 @@
   let data : any = {};
   let url : string;
   let searchPhrase : string;
+  let currentItem : string;
 
   async function navigate(to?: string) {
     items = [];
@@ -18,8 +19,8 @@
   }
 
   async function getMetadata(from: string) {
-    data = { meta: undefined, image: undefined};
-    data = {...(await axios.get(baseUrl + from)).data};
+    data = { meta: undefined, image: undefined, iptc: undefined };
+    data = {...(await axios.get(baseUrl + from)).data };
     console.log(data);
   }
 
@@ -44,12 +45,12 @@ $: getItems(searchPhrase);
     <div class="url">{url ? url : '/'}</div>
     {#if url}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
     {#each items as item}
-    <Entry {...item} on:click={() => {item.type == 'directory' ? navigate(item.resource) : getMetadata(item.resource);}}></Entry>
+    <Entry {...item} on:click={() => { currentItem = item.name; item.type == 'directory' ? navigate(item.resource) : getMetadata(item.resource);}}></Entry>
     {/each}
   </div>
   <div class="preview">
     {#if data.image ?? data.meta}
-      <Preview data="{data}"></Preview>
+      <Preview data="{data}" path={url}></Preview>
     {/if}
     {#if data.imageStack}
       <JSONViewer data="{data}"></JSONViewer>

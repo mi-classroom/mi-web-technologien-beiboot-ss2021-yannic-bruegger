@@ -5,12 +5,53 @@ const exif = require('exif-reader');
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const exiftool = require('exiftool-vendored').exiftool;
+
 app.use(cors());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY || './data';
 const FILE_PATTERN = process.env.FILE_PATTERN || '(.*)\\.(jpg|jpeg)';
 const PORT = process.env.PORT || 3000;
 const VALIDFIELDS = process.env?.FIELDS?.split(',').map((field)=>field.trim()) ?? [];
+const VALID_IPTC_TAGS = process.env?.TAGS?.split(',').map((field)=>field.trim()) ?? [];
+
+app.post('*', async (req, res) => {
+  if(!req.originalUrl){
+    res.status(500).send('Could not handle the request. It has no original URL.');
+    return;
+  }
+
+  if(req.originalUrl.indexOf('/../') >= 0) {
+    res.status(501).send('Backwards navigation not allowed.');
+    return;
+  }
+
+  const urlPath = req.originalUrl.split('?')[0];
+  const relativePath = urlPath === '/' ? '' : urlPath;
+  const absolutePath = getAbsolutePath(urlPath);
+
+  if(!isServed(absolutePath)) {
+    res.status(504).send('Directory or file not found.');
+    return;
+  }
+  
+  if(!fs.lstatSync(absolutePath).isDirectory()) {
+    res.status(505).send('This action is only possible on whole directories.');
+    return;
+  }
+
+  if(!req.body) {
+    res.status(506).send('There are no tags to set in request body.');
+    return;
+  }
+
+  setIPTCTagsOnDirectoryContent(directory, tags);
+
+  console.log(urlPath, relativePath, absolutePath);
+  res.send({urlPath, relativePath, absolutePath});
+});
 
 app.get('*', async (req, res) => {
   if(!req.originalUrl){
@@ -49,19 +90,21 @@ app.get('*', async (req, res) => {
   }
 })
 
+
+
 app.listen(PORT, () => {
   console.log(`Cranach metadata service listening at http://localhost:${PORT}`)
 })
 
 function getAbsolutePath(relativePath) {
-  return TARGET_DIRECTORY + (relativePath || '')
+  return TARGET_DIRECTORY + (relativePath ?? '')
 }
 
 function isServed(absolutePath) {
   const doesntExist = !fs.existsSync(absolutePath);
+  if(doesntExist) return false;
   const isDirectory = fs.lstatSync(absolutePath).isDirectory();
   const fileMatchesPattern = (new RegExp(FILE_PATTERN)).test(absolutePath);
-  if(doesntExist) return false;
   if(isDirectory || fileMatchesPattern) return true;
   return false;
 }
@@ -71,15 +114,23 @@ async function getMetadata(absolutePath){
   const isFile = fs.lstatSync(absolutePath).isFile();
   if(exists && isFile){
     const data = {};
-    const fullMeta = exif(await (await sharp(absolutePath).metadata()).exif).image;
-    if(VALIDFIELDS.length > 0) {
+
+    try {
+      const meta = await sharp(absolutePath).metadata().exif;
+      const filteredMeta = Object.fromEntries(Object.entries(meta ?? {}).filter((entry)=>VALIDFIELDS.indexOf(entry[0]) > -1));
+      data.meta = filteredMeta ?? {};
+    } catch {
       data.meta = {};
-      Object.keys(fullMeta).filter((key)=>VALIDFIELDS.includes(key)).forEach((key) => {
-        data.meta[key] = fullMeta[key];
-      });
-    } else {
-      data.meta = fullMeta;
     }
+    
+    try {
+      const iptc = await exiftool.read(absolutePath);
+      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=>VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
+      data.iptc = filteredIPTC ?? {};
+    } catch {
+      data.iptc = {}
+    }
+    
     data.image = `data:image;base64,${fs.readFileSync(absolutePath).toString('base64')}`;
     return data;
   }
@@ -102,7 +153,6 @@ function getDirectoryContent(relativePathToDirectory) {
   const content = [];
   items.forEach((item) => {
     const absolutePath = getAbsolutePath(`${relativePathToDirectory}/${item.name}`);
-    console.log(absolutePath)
     if(isServed(absolutePath)){
       const displayName = (item.isDirectory() ? displayDir(item.name) : displayFile(item.name));
       const name = item.name;
@@ -113,4 +163,8 @@ function getDirectoryContent(relativePathToDirectory) {
   });
 
   return content;
+}
+
+function setIPTCTagsOnDirectoryContent(directory, tags) {
+  return;
 }

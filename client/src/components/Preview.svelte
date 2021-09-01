@@ -34,6 +34,7 @@
         <th>Key</th>
         <th>Value</th>
       </tr>
+      {#if Object.keys(data.iptc).length > 0}
       {#each Object.keys(data.iptc) as key}
       <tr>
         <td>{key}</td>
@@ -43,15 +44,26 @@
       <tr>
         <td colspan="2"><input disabled={loading} type="submit" value="Save changes" on:click={saveChanges}></td>
       </tr>
+      {:else}
+      <tr>
+        <td colspan="2">Keine Metadaten vorhanden.</td>
+      </tr>
+      {/if}
     </table>
   </div>
 </main>
 
 <style>
+.preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 main {
   width: 100%;
   height: 100%;
-  padding: 1em;
   display: flex;
   position: relative;
 }

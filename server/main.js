@@ -127,7 +127,7 @@ async function getMetadata(absolutePath){
     
     try {
       const iptc = await exiftool.read(absolutePath);
-      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=>VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
+      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=> false && VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
       data.iptc = filteredIPTC ?? {};
     } catch {
       data.iptc = {}
@@ -159,7 +159,7 @@ function getDirectoryContent(relativePathToDirectory) {
       const displayName = (item.isDirectory() ? displayDir(item.name) : displayFile(item.name));
       const name = item.name;
       const resource = `${relativePathToDirectory}/${item.name}`;
-      const type = item.isDirectory() ? 'directory' : 'file';
+      const type = item.isDirectory() ? 'directory' : item.name.endsWith('json') ? 'file' : 'image';
       content.push({displayName, name, resource, type});
     };
   });

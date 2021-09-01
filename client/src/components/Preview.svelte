@@ -1,10 +1,27 @@
 <script type="ts">
   interface imageData {
     meta: any
+    iptc: any
     image: string
   };
 
+  async function saveChanges() {
+    loading = true;
+    await fetch(`http://127.0.0.1:3000${path}`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(data.iptc),
+    });
+    loading = false;
+  }
+
   export let data;
+  export let path;
+  let loading = false;
 </script>
 
 <main>
@@ -17,12 +34,15 @@
         <th>Key</th>
         <th>Value</th>
       </tr>
-      {#each Object.keys(data.meta) as key}
+      {#each Object.keys(data.iptc) as key}
       <tr>
         <td>{key}</td>
-        <td>{data.meta[key]}</td>
+        <td><input bind:value={data.iptc[key]} disabled={loading}></td>
       </tr>
       {/each}
+      <tr>
+        <td colspan="2"><input disabled={loading} type="submit" value="Save changes" on:click={saveChanges}></td>
+      </tr>
     </table>
   </div>
 </main>
@@ -52,5 +72,9 @@ img {
 
 th, td {
   padding: .5em 1em;
+}
+
+input {
+  width: 100%;
 }
 </style>

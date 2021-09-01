@@ -35,15 +35,19 @@
     <input type="text" class="searchbar" placeholder="*" bind:value={searchPhrase}>
   </div>
   <div class="search-results-info">
+    {#if filetreeItems.filter((item)=>item.type === 'directory').length > 0}
     <div class="aligned">
       <span class="material-icons">folder_opens</span>
       {filetreeItems.filter((item)=>item.type === 'directory').length} Verzeichnisse gefunden
     </div>
+    {/if}
+    {#if filetreeItems.filter((item)=>item.type === 'image').length > 0}
     <div class="aligned">
       <span class="material-icons">image</span>
       {filetreeItems.filter((item)=>item.type === 'image').length}
       Bilder gefunden
     </div>
+    {/if}
   </div>
   <div class="location aligned">
     <span class="material-icons">location_on</span> {url ? url : '/'}
@@ -62,7 +66,6 @@ nav {
   padding: var(--l);
   background-color: var(--darker);
   color: var(--lighter);
-  font-size: var(--s);
   min-width: 400px;
 }
 

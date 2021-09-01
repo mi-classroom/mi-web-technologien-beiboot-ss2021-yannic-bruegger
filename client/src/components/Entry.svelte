@@ -22,7 +22,6 @@ main {
   width: 100%;
   user-select: none;
   margin-bottom: var(--xxxs);
-  font-size: var(--s);
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -30,5 +29,6 @@ main {
 
 .icon {
   margin-right: var(--xs);
+  color: var(--accent);
 }
 </style>

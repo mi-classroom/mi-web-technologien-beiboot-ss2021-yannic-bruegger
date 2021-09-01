@@ -1,4 +1,7 @@
 <script type="ts">
+  import Entry from './Entry.svelte';
+import MetadataEditor from './MetadataEditor.svelte';
+
   interface imageData {
     meta: any
     iptc: any
@@ -28,29 +31,7 @@
   <div class="preview">
     <img src="{data.image}" alt="{data.meta.Artist}">
   </div>
-  <div class="metadata">
-    <table>
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      {#if Object.keys(data.iptc).length > 0}
-      {#each Object.keys(data.iptc) as key}
-      <tr>
-        <td>{key}</td>
-        <td><input bind:value={data.iptc[key]} disabled={loading}></td>
-      </tr>
-      {/each}
-      <tr>
-        <td colspan="2"><input disabled={loading} type="submit" value="Save changes" on:click={saveChanges}></td>
-      </tr>
-      {:else}
-      <tr>
-        <td colspan="2">Keine Metadaten vorhanden.</td>
-      </tr>
-      {/if}
-    </table>
-  </div>
+  <MetadataEditor></MetadataEditor>
 </main>
 
 <style>
@@ -66,27 +47,16 @@ main {
   height: 100%;
   display: flex;
   position: relative;
+  overflow: hidden;
 }
+
+main::-webkit-scrollbar {
+  display: none;
+}
+
 img {
   max-height: calc(100% - 2em);
   max-width: 100%;
   position: absolute;
-}
-.metadata {
-  background-color: var(--color-background-secondary);
-  border: 1px solid var(--color-border-secondary);
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  max-width: 400px;
-  border-radius: 6px;
-}
-
-th, td {
-  padding: .5em 1em;
-}
-
-input {
-  width: 100%;
 }
 </style>

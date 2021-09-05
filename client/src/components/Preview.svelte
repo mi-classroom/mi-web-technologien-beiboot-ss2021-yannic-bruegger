@@ -1,6 +1,8 @@
 <script type="ts">
+  import { onMount } from 'svelte';
+  import OpenSeadragon, { TileSource } from 'openseadragon';
   import Entry from './Entry.svelte';
-import MetadataEditor from './MetadataEditor.svelte';
+  import MetadataEditor from './MetadataEditor.svelte';
 
   interface imageData {
     meta: any
@@ -22,14 +24,19 @@ import MetadataEditor from './MetadataEditor.svelte';
     loading = false;
   }
 
+  
   export let data;
   export let path;
   let loading = false;
+  onMount(() => {
+    var viewer = OpenSeadragon({ id: "openseadragon", maxZoomLevel: 120, showNavigationControl: false });
+    viewer.addSimpleImage({url: data.image})
+  });
 </script>
 
 <main>
   <div class="preview">
-    <img src="{data.image}" alt="{data.meta.Artist}">
+    <div id="openseadragon"></div>
   </div>
   <MetadataEditor></MetadataEditor>
 </main>
@@ -54,9 +61,9 @@ main::-webkit-scrollbar {
   display: none;
 }
 
-img {
-  max-height: calc(100% - 2em);
-  max-width: 100%;
+#openseadragon {
+  height: 100%;
+  width: 100%;
   position: absolute;
 }
 </style>

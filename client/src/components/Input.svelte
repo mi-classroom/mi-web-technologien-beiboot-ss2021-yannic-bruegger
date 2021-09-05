@@ -7,18 +7,18 @@
   export let label : String;
   export let type : InputType;
   export let maxLength : number = 32;
-  export let content : string = "";
+  export let value : string = "";
 </script>
 
 
 
 <div class="input">
   {#if type === InputType.SINGLE_LINE_OF_TEXT}
-  <input bind:value={content}>
+  <input bind:value {maxLength}>
   {:else if type === InputType.MULTIPLE_LINES_OF_TEXT}
-  <textarea></textarea>
+  <textarea bind:value {maxLength}></textarea>
   {/if}
-  <progress class:red={ 100 * content.length / maxLength > 95} min="0" max={maxLength} value={content.length}></progress>
+  <progress class:red={ 100 * value.length / maxLength > 95} min="0" max={maxLength} value={value.length}></progress>
   <div class="label">{label}</div>
 </div>
 

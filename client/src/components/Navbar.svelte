@@ -5,9 +5,9 @@
 
   import Entry from './Entry.svelte';
 
-  export let filetreeItems : Array<Any> = [];
-  export let url : String = "";
-  export let searchPhrase : String = "";
+  export let filetreeItems : Array<any> = [];
+  export let url : string = "";
+  export let searchPhrase : string = "";
 
   const dispatch = createEventDispatcher();
 
@@ -70,7 +70,7 @@ nav {
 }
 
 nav > * {
-  margin-bottom: var(--m);
+  margin-bottom: var(--l);
 }
 
 .logo {

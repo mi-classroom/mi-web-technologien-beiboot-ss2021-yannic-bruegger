@@ -51,7 +51,7 @@ app.post('*', cors(), async (req, res) => {
   if(successful) {
     res.send({urlPath, relativePath, absolutePath});
   } else {
-    res.status(506).send('Unable to update IPTC data.');
+    res.status(507).send('Unable to update IPTC data.');
   }
 });
 
@@ -127,7 +127,8 @@ async function getMetadata(absolutePath){
     
     try {
       const iptc = await exiftool.read(absolutePath);
-      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=> false && VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
+      exiftool.end();
+      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=> true || VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
       data.iptc = filteredIPTC ?? {};
     } catch {
       data.iptc = {}
@@ -172,6 +173,7 @@ function setIPTCTagsOnDirectoryContent(relativePath, tags) {
   content.forEach((item) => {
     if(item.type === 'file'){
       exiftool.write(`${getAbsolutePath(relativePath)}/${item.name}`, tags, ['-overwrite_original']);
+      exiftool.end();
     }
   });
   return true;

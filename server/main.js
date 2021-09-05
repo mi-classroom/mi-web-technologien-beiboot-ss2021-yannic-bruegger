@@ -127,8 +127,7 @@ async function getMetadata(absolutePath){
     
     try {
       const iptc = await exiftool.read(absolutePath);
-      exiftool.end();
-      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry)=> true || VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
+      const filteredIPTC = Object.fromEntries(Object.entries(iptc).filter((entry) => true || VALID_IPTC_TAGS.indexOf(entry[0]) > -1));
       data.iptc = filteredIPTC ?? {};
     } catch {
       data.iptc = {}

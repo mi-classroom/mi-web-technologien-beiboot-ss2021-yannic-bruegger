@@ -49,10 +49,13 @@
     </div>
     {/if}
   </div>
+  <hr>
   <div class="location aligned">
     <span class="material-icons">location_on</span> {url ? url : '/'}
   </div>
-  <div class="actions"></div>
+  <div class="actions">
+    <span class="clickable aligned" on:click={() => alert('Download starting')}><span class="material-icons">download</span> Verzeichnis herunterladen</span>
+  </div>
   <div class="filetree">
     {#if url}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
     {#each filetreeItems as item}
@@ -69,14 +72,11 @@ nav {
   min-width: 400px;
 }
 
-nav > * {
-  margin-bottom: var(--l);
-}
-
 .logo {
   color: var(--accent);
   font-size: var(--l);
   font-weight: var(--fw-light);
+  margin-bottom: var(--xl)
 }
 
 .search {
@@ -96,13 +96,29 @@ nav > * {
 
 .search-results-info {
   color: var(--light);
+  margin-bottom: var(--s);
+}
+
+hr {
+  margin-bottom: var(--s);
+  border: none;
+  height: 1px;
+  background-color: var(--lighten);
 }
 
 .location {
   color: var(--lighter);
 }
 
+.actions {
+  margin-bottom: var(--l);
+}
+
 .icon{
   color: var(--accent);
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>

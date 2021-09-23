@@ -6,10 +6,12 @@ const exiftool = require('exiftool-vendored').exiftool;
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const zip = require('express-easy-zip');
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
+app.use(zip());
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY ?? './data';
 const FILE_PATTERN = process.env.FILE_PATTERN ?? '(.*)\\.(jpg|jpeg)';
@@ -67,6 +69,7 @@ app.get('*', async (req, res) => {
   }
   
   const searchQuery = req.query['filter'];
+  const action = req.query['action'];
   const urlPath = req.originalUrl.split('?')[0];
   const relativePath = urlPath === '/' ? '' : urlPath;
   const absolutePath = getAbsolutePath(urlPath);
@@ -81,7 +84,14 @@ app.get('*', async (req, res) => {
       res.send(getFilteredDirectoryContent(relativePath, searchQuery));
     }
     else {
-      res.send(getDirectoryContent(relativePath));
+      if(action === 'download') {
+        res.zip({
+          files: [{ path: getAbsolutePath(relativePath), filename: 'TEST'}],
+          filename: `${relativePath.slice(1) ? relativePath.slice(1) : 'cda' }.zip`,
+        });
+      } else {
+        res.send(getDirectoryContent(relativePath));
+      }
     }
   } else {
     if(absolutePath.endsWith('.json')){

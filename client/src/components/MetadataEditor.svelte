@@ -6,7 +6,7 @@
     MULTIPLE_LINES_OF_TEXT,
   }
 
-  let data;
+  export let data = {iptc: undefined};
   let loading;
   let expanded = false;
   const languages = ['de', 'en']
@@ -36,7 +36,7 @@
   <div class="top">
     <div class="aligned">
       <span class="material-icons">crop_7_5</span>
-      Größe: 100x100
+      Größe: {data.iptc.ImageSize}px
     </div>
     <div class="aligned expander" on:click={() => {expanded = !expanded; console.log(expanded)}}>
       <span class="material-icons accent">list</span>

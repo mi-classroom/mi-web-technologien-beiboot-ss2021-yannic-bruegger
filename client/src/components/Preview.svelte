@@ -38,7 +38,7 @@
   <div class="preview">
     <div id="openseadragon"></div>
   </div>
-  <MetadataEditor></MetadataEditor>
+  <MetadataEditor data={data}></MetadataEditor>
 </main>
 
 <style>

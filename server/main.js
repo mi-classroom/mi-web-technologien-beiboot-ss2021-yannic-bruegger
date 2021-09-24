@@ -86,8 +86,8 @@ app.get('*', async (req, res) => {
     else {
       if(action === 'download') {
         res.zip({
-          files: [{ path: getAbsolutePath(relativePath), name: relativePath.slice(1) ?? 'cda' }],
-          filename: `${ relativePath.slice(1) ?? 'cda' }.zip`,
+          files: [{ path: getAbsolutePath(relativePath), name: relativePath.slice(1) ? relativePath.slice(1) : 'cda' }],
+          filename: `${relativePath.slice(1) ? relativePath.slice(1) : 'cda' }.zip`,
         });
       } else {
         res.send(getDirectoryContent(relativePath)); 

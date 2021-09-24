@@ -42,7 +42,6 @@ npm install
 cd ..
 ```
 
-## Start the application
 After successfully installing the dependencies you can start all the neded modules (client and server) of *cranach metadata*. You can do so by executing the following steps:
 ```bash
 # 1. Start the server (in one terminal)

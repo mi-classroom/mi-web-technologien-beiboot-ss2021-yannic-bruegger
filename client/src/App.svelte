@@ -4,8 +4,8 @@
   import Preview from './components/Preview.svelte';
   import JSONViewer from './components/JSONViewer.svelte';
   import NavBar from './components/NavBar.svelte';
+  import { baseUrl } from './config.js';
 
-  const baseUrl = 'http://127.0.0.1:3000';
   let filetreeItems = [];
   let data : any = {};
   let url : string;
@@ -41,12 +41,28 @@
     console.log(filetreeItems);
   }
 
+  function downloadFileHandler(event) {
+    startDownload(event.detail);
+  }
+
+  async function startDownload(path : string){
+    let file = await axios.get(`${baseUrl}${url}?action=download`);
+
+  }
+
 
 $: getItems(searchPhrase);
 </script>
 
 <main>
-  <NavBar filetreeItems={filetreeItems} bind:searchPhrase={searchPhrase} {url} on:navigate={navigateHandler} on:openFile={openFileHandler}></NavBar>
+  <NavBar
+    filetreeItems={filetreeItems}
+    bind:searchPhrase={searchPhrase}
+    {url}
+    on:navigate={navigateHandler}
+    on:openFile={openFileHandler}
+    on:download={downloadFileHandler}
+  ></NavBar>
   <div class="preview">
     {#if data.image ?? data.meta}
       <Preview data="{data}" path={url}></Preview>

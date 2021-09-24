@@ -2,9 +2,11 @@
   import { bind } from "svelte/internal";
 
   import { createEventDispatcher } from 'svelte';
-
+  
   import Entry from './Entry.svelte';
 
+  import { baseUrl } from '../config.js';
+  
   export let filetreeItems : Array<any> = [];
   export let url : string = "";
   export let searchPhrase : string = "";
@@ -23,6 +25,10 @@
 
   function openFile(file) {
     dispatch('openFile', file);
+  };
+
+  function downloadFolder(path) {
+    dispatch('download', path);
   };
 
   let currentItem = "";
@@ -54,7 +60,12 @@
     <span class="material-icons">location_on</span> {url ? url : '/'}
   </div>
   <div class="actions">
-    <span class="clickable aligned" on:click={() => alert('Download starting')}><span class="material-icons">download</span> Verzeichnis herunterladen</span>
+    <a href={`${baseUrl}${url}?action=download`}>
+      <span class="clickable aligned" on:click={ () => { downloadFolder(getResource()) } }>
+        <span class="material-icons">download</span>
+        Verzeichnis herunterladen
+      </span>
+    </a>
   </div>
   <div class="filetree">
     {#if url}<Entry name=".." type="top" on:click={() => {navigate(getResource())}}></Entry>{/if}
@@ -112,6 +123,10 @@ hr {
 
 .actions {
   margin-bottom: var(--l);
+}
+
+a {
+  text-decoration: none;
 }
 
 .icon{

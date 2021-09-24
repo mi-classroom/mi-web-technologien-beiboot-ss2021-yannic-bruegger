@@ -6,7 +6,7 @@ Zum Modul Web Technologien gibt es ein begleitendes Projekt. Im Rahmen dieses Pr
 
 Als organisatorischen Rahmen für das Projekt nutzen wir GitHub Classroom. Inhaltlich befassen wir uns mit der Entwicklung einer kleinen Web-Anwendung für die Bearbeitung von Bildern. Hierbei steht weniger ein professioneller Konzeptions-, Entwurfs- und Entwicklungsprozess im Vordergrund, sondern vielmehr die sukzessive Weiterentwicklung einer Anwendung, das Ausprobieren, Vergleichen, Refactoren und die Freude an lauffähigem Code.
 
-## Decision Records
+## Decision records
 You are curious in what decisions have been made and why? Take a look at our [Architecture Decision Records (ADRs)](/adr/README.md). 
 
 ## Get a local copy up and running

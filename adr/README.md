@@ -11,3 +11,4 @@ The following decisions have been tracked:
 - [Select a dependency to write metadata](06-write-metadata.md)
 - [Select a dependency to generate ZIP archives](07-select-create-zip-dependency.md)
 - [Justify the use of Docker-Compose](08-docker-compose.md)
+- [Justify why the multi language IPTC feature is not yet implemented](09-09-multi-language-iptc.md)

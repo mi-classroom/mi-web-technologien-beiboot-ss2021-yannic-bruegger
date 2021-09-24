@@ -1,4 +1,9 @@
 <script type="ts">
+  import { onMount } from 'svelte';
+  import OpenSeadragon, { TileSource } from 'openseadragon';
+  import Entry from './Entry.svelte';
+  import MetadataEditor from './MetadataEditor.svelte';
+
   interface imageData {
     meta: any
     iptc: any
@@ -19,62 +24,46 @@
     loading = false;
   }
 
+  
   export let data;
   export let path;
   let loading = false;
+  onMount(() => {
+    var viewer = OpenSeadragon({ id: "openseadragon", maxZoomLevel: 120, showNavigationControl: false });
+    viewer.addSimpleImage({url: data.image})
+  });
 </script>
 
 <main>
   <div class="preview">
-    <img src="{data.image}" alt="{data.meta.Artist}">
+    <div id="openseadragon"></div>
   </div>
-  <div class="metadata">
-    <table>
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-      </tr>
-      {#each Object.keys(data.iptc) as key}
-      <tr>
-        <td>{key}</td>
-        <td><input bind:value={data.iptc[key]} disabled={loading}></td>
-      </tr>
-      {/each}
-      <tr>
-        <td colspan="2"><input disabled={loading} type="submit" value="Save changes" on:click={saveChanges}></td>
-      </tr>
-    </table>
-  </div>
+  <MetadataEditor data={data}></MetadataEditor>
 </main>
 
 <style>
+.preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 main {
   width: 100%;
   height: 100%;
-  padding: 1em;
   display: flex;
   position: relative;
-}
-img {
-  max-height: calc(100% - 2em);
-  max-width: 100%;
-  position: absolute;
-}
-.metadata {
-  background-color: var(--color-background-secondary);
-  border: 1px solid var(--color-border-secondary);
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  max-width: 400px;
-  border-radius: 6px;
+  overflow: hidden;
 }
 
-th, td {
-  padding: .5em 1em;
+main::-webkit-scrollbar {
+  display: none;
 }
 
-input {
+#openseadragon {
+  height: 100%;
   width: 100%;
+  position: absolute;
 }
 </style>

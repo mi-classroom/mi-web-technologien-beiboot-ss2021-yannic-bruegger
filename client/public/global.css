@@ -3,19 +3,16 @@
 	margin: 0;
 }
 
-:root {
+body, html {
+	height: 100vh;
+	font-family: var(--font-sans-serif);
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
 	box-sizing: border-box;
 	position: relative;
 	background-color: var(--color-background-primary);
-	font-size: var(--base);
 	color: var(--color-foreground-secondary);
-	margin: 0;
-	padding: 0;
-	font-family: 'Open Sans', sans-serif;
-}
-
-body {
-	height: 100vh;
 }
 
 a {
@@ -51,10 +48,43 @@ input:disabled {
 	color: var(--grey-4);
 }
 
+table {
+	border-collapse: collapse;
+}
+
+th, td{
+	text-align: left;
+	vertical-align: baseline;
+	padding: .5em;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.material-icons {
+	width: 1em;
+	height: 1em;
+	font-size: 1.6em !important;
+	user-select: none;
+}
+
+.aligned {
+	display: flex;
+	align-items: center;
+	gap: var(--xxs);
+}
+
 button {
-	color: var(--grey-0);
-	background-color: var(--background-color);
+	background-color: var(--accent);
+	color: var(--darker);
 	outline: none;
+	display: flex;
+	align-items: center;
+	font-size: .8rem;
+	padding: var(--xxs) var(--s);
+	margin-right: var(--xxs)
+}
+
+button > .material-icons {
+	margin-right: var(--xs)
 }
 
 button:disabled {
@@ -67,15 +97,4 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: var(--grey-1);
-}
-
-table {
-	border-collapse: collapse;
-}
-
-th, td{
-	text-align: left;
-	vertical-align: baseline;
-	padding: .5em;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.24);
 }

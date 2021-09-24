@@ -3,14 +3,14 @@
   const dispatch = createEventDispatcher();
   
   import { iptcFields } from '../config';
-  
+
   import Input from './Input.svelte';
   import { InputType } from './Input.svelte';
   
   export let data = {iptc: undefined};
   let storedIptcState = {iptc: undefined};
 
-  let loading;
+  export let loading;
   let expanded = false;
   const languages = ['de', 'en'];
   
@@ -45,14 +45,15 @@
         label={iptcField.labels[language]}
         type={iptcField.inputType}
         maxLength={iptcField.maxLength}
+        bind:disabled={loading}
         bind:value={data.iptc[iptcField.fieldName]}/>
       { /each }
     </div>
     { /each }
   </div>
   <div class="aligned">
-    <button on:click={save}><span class="material-icons">save</span>Speichern</button>
-    <button on:click={abort}><span class="material-icons" >close</span>Abbrechen</button>
+    <button on:click={save} disabled={loading}><span class="material-icons">save</span>Speichern</button>
+    <button on:click={abort} disabled={loading}><span class="material-icons" >close</span>Abbrechen</button>
   </div>
 </footer>
 

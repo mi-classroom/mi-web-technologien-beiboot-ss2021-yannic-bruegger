@@ -10,15 +10,16 @@
   export let type : InputType;
   export let maxLength : number = 32;
   export let value : string = "";
+  export let disabled : boolean = false;
 </script>
 
 
 
 <div class="input">
   {#if type === InputType.SINGLE_LINE_OF_TEXT}
-  <input bind:value {maxLength}>
+  <input bind:value {maxLength} readonly={disabled}>
   {:else if type === InputType.MULTIPLE_LINES_OF_TEXT}
-  <textarea bind:value {maxLength}></textarea>
+  <textarea bind:value {maxLength} readonly={disabled}></textarea>
   {/if}
   <progress class:red={ 100 * value.length / maxLength > 95} min="0" max={maxLength} value={value.length}></progress>
   <div class="label">{label}</div>
@@ -38,6 +39,10 @@
     color: var(--lighter);
     outline: none;
     margin: 0;
+  }
+
+  input:read-only, textarea:read-only {
+    opacity: .3;
   }
 
   progress {

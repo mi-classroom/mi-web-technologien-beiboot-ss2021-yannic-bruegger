@@ -47,7 +47,7 @@
   <div class="preview">
     <div id="openseadragon"></div>
   </div>
-  <MetadataEditor data={data} on:save={saveChanges}></MetadataEditor>
+  <MetadataEditor data={data} on:save={saveChanges} bind:loading></MetadataEditor>
 </main>
 
 <style>

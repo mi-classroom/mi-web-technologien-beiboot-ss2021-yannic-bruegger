@@ -1,9 +1,11 @@
-<script type="ts">
-  enum InputType {
+<script type="ts" context="module">
+    export enum InputType {
     SINGLE_LINE_OF_TEXT,
     MULTIPLE_LINES_OF_TEXT,
   }
+</script>
 
+<script type="ts">
   export let label : String;
   export let type : InputType;
   export let maxLength : number = 32;

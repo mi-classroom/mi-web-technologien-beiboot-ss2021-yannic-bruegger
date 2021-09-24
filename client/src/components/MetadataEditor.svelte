@@ -1,10 +1,6 @@
 <script lang="ts">
   import Input from './Input.svelte';
-
-  enum InputType {
-    SINGLE_LINE_OF_TEXT,
-    MULTIPLE_LINES_OF_TEXT,
-  }
+  import { InputType } from './Input.svelte';
 
   export let data = {iptc: undefined};
   let loading;

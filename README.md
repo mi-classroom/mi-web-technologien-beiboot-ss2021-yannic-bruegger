@@ -1,3 +1,5 @@
+![cda; cranach editor; browse and edit metadata in Cranach Digital Archive](/header.png)
+
 # Web Technologien // begleitendes Projekt Sommersemester 2021
 
 Zum Modul Web Technologien gibt es ein begleitendes Projekt. Im Rahmen dieses Projekts werden wir von Veranstaltung zu Veranstaltung ein Projekt sukzessive weiter entwickeln und uns im Rahmen der Veranstaltung den Fortschritt anschauen, Code Reviews machen und Entwicklungsschritte vorstellen und diskutieren.

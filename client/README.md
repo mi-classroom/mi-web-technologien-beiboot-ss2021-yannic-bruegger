@@ -1,4 +1,4 @@
-# beiboot-ss2021-client
+![cda; cranach editor; browse and edit metadata in Cranach Digital Archive](/header.png)
 
 An website that shows metadata of images on a server in a directory structure.
 
@@ -6,7 +6,12 @@ See the main [README](../README.md) for additional information and a guide on ho
 
 There are two ways of running an instance of the client. Choose between [run as docker container](#run-as-docker-container) and [run manually](#run-manually) 
 
-## Run as Docker container
+## Get a version up and running
+
+### Run manually
+
+
+### Run as Docker container
 
 Make sure you have [docker](https://www.docker.com/) installed and configured. You can test your installation by executing the following command. If no error occures, you are good to go.
 

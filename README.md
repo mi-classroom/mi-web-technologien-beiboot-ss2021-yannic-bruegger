@@ -11,6 +11,18 @@ You are curious in what decisions have been made and why? Take a look at our [Ar
 
 ## Get a local copy up and running
 
+### Docker
+
+> **Prerequisites**: Please make sure that you have an up to date version of DOcker and docker-compose up and running on your computer. The links below might help you.
+
+The easiest way to get a local copy up and running is by using [Docker](https://docs.docker.com/get-started/) and [Docker-Compose](https://docs.docker.com/compose/). Simply clone the repo, navigate into the directory and execute docker-compose. The following code snippet shows how it works.
+
+Remember to read [Images and data](#images-and-data)! Otherwise you wont be able to use the application properly. 
+
+If that does not work, take a look at the guides for [client](/client/README.md) and [server](/server/README.md).
+
+### Manually
+
 > **Prerequisites**: Please make sure that you have an up to date version of nodejs and npm up and running on your computer. You can check that by executing ``node --version`` and ``npm --version``.
 
 In order to get a local copy of *cranach metadata* up and running you need to follow the these steps:

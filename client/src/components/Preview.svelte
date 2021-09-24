@@ -1,7 +1,6 @@
 <script type="ts">
   import { onMount } from 'svelte';
   import OpenSeadragon, { TileSource } from 'openseadragon';
-  import Entry from './Entry.svelte';
   import MetadataEditor from './MetadataEditor.svelte';
 
   interface imageData {

@@ -179,17 +179,10 @@ function getDirectoryContent(relativePathToDirectory) {
 
 function setIPTCTagsOnDirectoryContent(relativePath, tags) {
   let content = getDirectoryContent(relativePath);
-  content.forEach((item) => {
-    if(item.type === 'file'){
+  content.forEach(async (item) => {
+    if(item.type === 'image'){
       exiftool.write(`${getAbsolutePath(relativePath)}/${item.name}`, tags, ['-overwrite_original']);
-      exiftool.end();
     }
   });
-  return true;
-  try {
-    
-  } catch {
-    return false;
-  }
   return true;
 }

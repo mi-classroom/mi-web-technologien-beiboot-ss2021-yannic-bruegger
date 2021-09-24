@@ -12,7 +12,6 @@
   let searchPhrase : string;
 
   function navigateHandler(event) {
-    console.log(event);
     navigate(event.detail);
   }
 
@@ -20,7 +19,6 @@
     filetreeItems = [];
     data = { meta: undefined, image: undefined};
     url = to || '';
-    console.log(url ? `?path=${url}` : '');
     window.location.search = url ? `?path=${url}` : '';
   }
 
@@ -31,14 +29,12 @@
   async function getMetadata(from: string) {
     data = { meta: undefined, image: undefined, iptc: undefined };
     data = {...(await axios.get(baseUrl + from)).data };
-    console.log(data);
   }
 
 
   async function getItems(searchPhrase ?: string){
     url = window.location.search.split('=')[1]
     filetreeItems = (await axios.get((url ? `${baseUrl}${url}` : baseUrl) + (searchPhrase ? `?filter=${searchPhrase}` : ''))).data;
-    console.log(filetreeItems);
   }
 
   function downloadFileHandler(event) {

@@ -1,5 +1,5 @@
 <script type="ts" context="module">
-    export enum InputType {
+  export enum InputType {
     SINGLE_LINE_OF_TEXT,
     MULTIPLE_LINES_OF_TEXT,
   }

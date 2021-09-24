@@ -3,27 +3,14 @@
   import OpenSeadragon, { TileSource } from 'openseadragon';
   import MetadataEditor from './MetadataEditor.svelte';
 
+  import { iptcFields } from '../config';
+
   interface imageData {
     meta: any
     iptc: any
     image: string
   };
 
-  async function saveChanges() {
-    loading = true;
-    await fetch(`http://127.0.0.1:3000${path}`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(data.iptc),
-    });
-    loading = false;
-  }
-
-  
   export let data;
   export let path;
   let loading = false;
@@ -31,13 +18,36 @@
     var viewer = OpenSeadragon({ id: "openseadragon", maxZoomLevel: 120, showNavigationControl: false });
     viewer.addSimpleImage({url: data.image})
   });
+
+  async function saveChanges() {
+    loading = true;
+
+    const allowedFields = iptcFields.map(field => field.fieldName);
+    const fieldsToUpdate = Object.keys(data.iptc)
+    .filter(field => allowedFields.includes(field))
+    .reduce((obj, key) => {
+      obj[key] = data.iptc[key];
+      return obj;
+    }, {});
+
+    await fetch(`http://127.0.0.1:3000${path}`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(fieldsToUpdate),
+    });
+    loading = false;
+  }
 </script>
 
 <main>
   <div class="preview">
     <div id="openseadragon"></div>
   </div>
-  <MetadataEditor data={data}></MetadataEditor>
+  <MetadataEditor data={data} on:save={saveChanges}></MetadataEditor>
 </main>
 
 <style>

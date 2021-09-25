@@ -1,34 +1,28 @@
 <script lang="ts">
+  import { createEventDispatcher, onMount } from 'svelte';
+  const dispatch = createEventDispatcher();
+  
+  import { iptcFields } from '../config';
+
   import Input from './Input.svelte';
-
-  enum InputType {
-    SINGLE_LINE_OF_TEXT,
-    MULTIPLE_LINES_OF_TEXT,
-  }
-
+  import { InputType } from './Input.svelte';
+  
   export let data = {iptc: undefined};
-  let loading;
+  let storedIptcState = {iptc: undefined};
+
+  export let loading;
   let expanded = false;
-  const languages = ['de', 'en']
-  const iptcFields = [
-    { fieldName: 'Title', labels: { de: 'Titel', en: 'Title' }, inputType: InputType.SINGLE_LINE_OF_TEXT, maxLength: 32 },
-    { fieldName: 'Caption', labels: { de: 'Dateiart / Beschreibung', en: 'Type / Description' }, inputType: InputType.MULTIPLE_LINES_OF_TEXT, maxLength: 2000 },
-    { fieldName: 'Creator', labels: { de: 'Autor / Rechte', en: 'Author / Copyright' }, inputType: InputType.SINGLE_LINE_OF_TEXT, maxLength: 32 },
-    { fieldName: 'Credit', labels: { de: 'Quelle', en: 'Source' }, inputType: InputType.SINGLE_LINE_OF_TEXT, maxLength: 32 },
-  ];
-  let metadata = {
-    de: {
-      Title: 'Some Title',
-      Caption: 'Some Caption',
-      Creator: 'Me',
-      Credit: 'Museum of arts',
-    },
-    en: {
-      Title: 'Some Title',
-      Caption: 'Some Caption',
-      Creator: 'Me',
-      Credit: 'Museum of arts',
-    }
+  const languages = ['de', 'en'];
+  
+  onMount(() => {
+    storedIptcState = {...data.iptc};
+  });
+  function abort() {
+    data.iptc = {...storedIptcState};
+  }
+  function save() {
+    storedIptcState = {...data.iptc}
+    dispatch('save')
   }
 </script>
 
@@ -38,7 +32,7 @@
       <span class="material-icons">crop_7_5</span>
       Größe: {data.iptc.ImageSize}px
     </div>
-    <div class="aligned expander" on:click={() => {expanded = !expanded; console.log(expanded)}}>
+    <div class="aligned expander" on:click={() => {expanded = !expanded}}>
       <span class="material-icons accent">list</span>
       IPTC: -
     </div>
@@ -51,14 +45,15 @@
         label={iptcField.labels[language]}
         type={iptcField.inputType}
         maxLength={iptcField.maxLength}
-        bind:value={metadata[language][iptcField.fieldName]}/>
+        bind:disabled={loading}
+        bind:value={data.iptc[iptcField.fieldName]}/>
       { /each }
     </div>
     { /each }
   </div>
   <div class="aligned">
-    <button><span class="material-icons">save</span>Speichern</button>
-    <button><span class="material-icons">close</span>Abbrechen</button>
+    <button on:click={save} disabled={loading}><span class="material-icons">save</span>Speichern</button>
+    <button on:click={abort} disabled={loading}><span class="material-icons" >close</span>Abbrechen</button>
   </div>
 </footer>
 
